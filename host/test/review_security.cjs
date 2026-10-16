@@ -1,0 +1,20 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const source = fs.readFileSync(require('node:path').join(__dirname, '..', 'main.cjs'), 'utf8');
+function extract(name) { return source.slice(source.indexOf(`function ${name}(`), source.indexOf('\n}', source.indexOf(`function ${name}(`)) + 2); }
+let next = 0;
+const context = { crypto: { randomInt: (min, max) => { assert.equal(min, 0); assert.equal(max, 1000000); return next++; } } };
+vm.createContext(context);
+vm.runInContext(extract('getHardwareBoundPin') + '\n' + extract('encodeUniversal9Code'), context);
+assert.equal(context.getHardwareBoundPin('same hardware'), '000000');
+assert.equal(context.getHardwareBoundPin('same hardware'), '000001');
+assert.equal(context.encodeUniversal9Code('192.168.1.42', '654321').code9, '001042654321');
+context.authenticateSession = (_pin, token) => token === 'valid' ? { success: true, token, trusted: true } : { success: false };
+context.globalFailedAuthAttempts = Array(20).fill(Date.now());
+context.evaluateAuthAttempt = () => { throw Error('Unauthenticated budget must block first'); };
+context.failedAttemptsMap = new Map();
+vm.runInContext(extract('handleAuthAttempt'), context);
+assert.equal(context.handleAuthAttempt('shared NAT', '', 'valid').success, true);
+assert.equal(context.handleAuthAttempt('shared NAT', '123456', '').isBlocked, true);
+console.log('Review security regressions passed: random PIN, 12 digit code, trusted token under global lockout');

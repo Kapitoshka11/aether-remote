@@ -1,0 +1,1492 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aether Remote Host Protocol Schema",
+  "description": "WebSocket action envelopes. InboundAction is generated from the runtime allowlist; actions contains payload documentation. Status-only responses are documented under their requests.",
+  "definitions": {
+    "Action": {
+      "type": "string",
+      "enum": [
+        "ACCOUNT_HELLO",
+        "ACCOUNT_PROOF",
+        "AUDIO_STREAM",
+        "AUDIO_STREAM_STATUS",
+        "AUTH",
+        "CLIPBOARD",
+        "CLIPBOARD_ITEM",
+        "CLIPBOARD_TEXT",
+        "CLIPBOARD_WRITE_ACK",
+        "DECK_ACTION_RESULT",
+        "DECK_ASSET_CHUNK",
+        "DECK_ASSET_ERROR",
+        "DECK_ASSET_REQUEST",
+        "DECK_NAVIGATE",
+        "DECK_NAVIGATION",
+        "DECK_PATCH",
+        "DECK_SLIDER",
+        "DECK_SNAPSHOT",
+        "DECK_STATE_PATCH",
+        "DECK_SYNC_REQUEST",
+        "DECK_TRIGGER",
+        "FILE_CANCEL",
+        "FILE_CHUNK",
+        "FILE_CHUNK_ACK",
+        "FILE_END",
+        "FILE_END_ACK",
+        "FILE_START",
+        "FILE_START_ACK",
+        "FRAME_ACK",
+        "GET_TELEMETRY",
+        "KEY_PRESS",
+        "KEY_PRESSED",
+        "KILL_PROCESS",
+        "MEDIA",
+        "MOUSE_CLICK",
+        "MOUSE_CLICKED",
+        "MOUSE_MOVE",
+        "MOUSE_MOVED",
+        "MOUSE_SCROLL",
+        "MOUSE_SCROLLED",
+        "PING",
+        "PONG",
+        "POWER",
+        "REMOTE_KEY_PRESS",
+        "REMOTE_MOUSE_CLICK",
+        "REMOTE_MOUSE_MOVE",
+        "REMOTE_MOUSE_SCROLL",
+        "SEND_TOAST",
+        "STREAM_FRAME",
+        "STREAM_FRAME_META",
+        "STREAM_STATUS",
+        "SYSTEM",
+        "TAKE_SCREENSHOT",
+        "TAKE_SCREENSHOT_RESPONSE",
+        "TELEMETRY",
+        "WAKE_ENROLL",
+        "WRITE_CLIPBOARD"
+      ]
+    },
+    "InboundAction": {
+      "type": "string",
+      "enum": [
+        "ACCOUNT_HELLO",
+        "ACCOUNT_PROOF",
+        "AUDIO_STREAM",
+        "AUTH",
+        "CLIPBOARD",
+        "DECK_ASSET_REQUEST",
+        "DECK_NAVIGATE",
+        "DECK_SLIDER",
+        "DECK_SYNC_REQUEST",
+        "DECK_TRIGGER",
+        "FILE_CANCEL",
+        "FILE_CHUNK",
+        "FILE_CHUNK_ACK",
+        "FILE_END",
+        "FILE_END_ACK",
+        "FILE_START",
+        "FILE_START_ACK",
+        "FRAME_ACK",
+        "GET_TELEMETRY",
+        "KEY_PRESS",
+        "KILL_PROCESS",
+        "MEDIA",
+        "MOUSE_CLICK",
+        "MOUSE_MOVE",
+        "MOUSE_SCROLL",
+        "PING",
+        "POWER",
+        "REMOTE_KEY_PRESS",
+        "REMOTE_MOUSE_CLICK",
+        "REMOTE_MOUSE_MOVE",
+        "REMOTE_MOUSE_SCROLL",
+        "SEND_TOAST",
+        "STREAM_FRAME",
+        "SYSTEM",
+        "TAKE_SCREENSHOT",
+        "WAKE_ENROLL",
+        "WRITE_CLIPBOARD"
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "action"
+  ],
+  "properties": {
+    "action": {
+      "$ref": "#/definitions/Action"
+    }
+  },
+  "actions": {
+    "AUTH": {
+      "description": "Authentication handshake",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "AUTH"
+          },
+          "pin": {
+            "type": "string",
+            "maxLength": 32
+          },
+          "sessionToken": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "deviceModel": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "capabilities": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            }
+          }
+        }
+      },
+      "responses": {
+        "AUTH_OK": {
+          "properties": {
+            "status": {
+              "const": "AUTH_OK"
+            },
+            "sessionToken": {
+              "type": "string"
+            },
+            "trusted": {
+              "type": "boolean"
+            },
+            "connectedClients": {
+              "type": "integer"
+            },
+            "tlsFingerprint": {
+              "type": "string",
+              "pattern": "^SHA256:[A-Fa-f0-9]{64}$"
+            }
+          }
+        },
+        "AUTH_FAILED": {
+          "properties": {
+            "status": {
+              "const": "AUTH_FAILED"
+            },
+            "error": {
+              "type": "string"
+            },
+            "remainingAttempts": {
+              "type": "integer"
+            }
+          }
+        },
+        "AUTH_BLOCKED": {
+          "properties": {
+            "status": {
+              "const": "AUTH_BLOCKED"
+            },
+            "error": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "GET_TELEMETRY": {
+      "description": "Request host performance and media status",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "GET_TELEMETRY"
+          }
+        }
+      },
+      "responses": {
+        "TELEMETRY": {
+          "properties": {
+            "action": {
+              "const": "TELEMETRY"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "number"
+                },
+                "ram": {
+                  "type": "number"
+                },
+                "ramUsedGb": {
+                  "type": "number"
+                },
+                "ramTotalGb": {
+                  "type": "number"
+                },
+                "net_upload": {
+                  "type": "number"
+                },
+                "net_download": {
+                  "type": "number"
+                },
+                "hostname": {
+                  "type": "string"
+                },
+                "uptime": {
+                  "type": "integer"
+                },
+                "track": {
+                  "type": "string"
+                },
+                "artist": {
+                  "type": "string"
+                },
+                "isPlaying": {
+                  "type": "boolean"
+                },
+                "connectedClients": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "STREAM_FRAME": {
+      "description": "Subscribe or unsubscribe from screen stream",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "STREAM_FRAME"
+          },
+          "start": {
+            "type": "boolean"
+          },
+          "command": {
+            "type": "string",
+            "enum": [
+              "START",
+              "STOP"
+            ]
+          },
+          "monitorIndex": {
+            "type": "integer"
+          },
+          "quality": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 100
+          },
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "1080p",
+              "720p",
+              "480p"
+            ]
+          }
+        }
+      },
+      "responses": {
+        "SCREEN_FRAME": {
+          "description": "Binary WebSocket payload: 0x01 marker followed by JPEG bytes"
+        }
+      }
+    },
+    "FRAME_ACK": {
+      "description": "Acknowledge frame render to calculate latency",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "FRAME_ACK"
+          },
+          "frameId": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sentAt": {
+            "type": "number"
+          },
+          "receivedAt": {
+            "type": "integer"
+          },
+          "accepted": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "STREAM_FRAME_META": {
+      "description": "Identifies the binary screen frame that immediately follows this message",
+      "response": {
+        "type": "object",
+        "required": [
+          "action",
+          "frameId",
+          "sentAt"
+        ],
+        "properties": {
+          "action": {
+            "const": "STREAM_FRAME_META"
+          },
+          "frameId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sentAt": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "AUDIO_STREAM": {
+      "description": "Toggle audio stream loopback",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "enabled"
+        ],
+        "properties": {
+          "action": {
+            "const": "AUDIO_STREAM"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "FILE_START": {
+      "description": "Initiate chunked file upload",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "fileName",
+          "fileSize",
+          "chunkSize"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_START"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "fileSize": {
+            "type": "integer"
+          },
+          "chunkSize": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "FILE_CHUNK": {
+      "description": "Upload a binary file chunk",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "fileId",
+          "chunkIndex",
+          "data"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_CHUNK"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "chunkIndex": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "FILE_END": {
+      "description": "Complete file upload",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "fileId"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_END"
+          },
+          "fileId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "KILL_PROCESS": {
+      "description": "Terminate a process",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "KILL_PROCESS"
+          },
+          "command": {
+            "type": "string"
+          },
+          "process": {
+            "type": "string"
+          },
+          "process_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "POWER": {
+      "description": "Trigger system power commands",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "command"
+        ],
+        "properties": {
+          "action": {
+            "const": "POWER"
+          },
+          "command": {
+            "type": "string",
+            "enum": [
+              "LOCK",
+              "SLEEP",
+              "SHUTDOWN",
+              "REBOOT",
+              "ALT_F4",
+              "CLOSE_WINDOW"
+            ]
+          }
+        }
+      }
+    },
+    "MEDIA": {
+      "description": "Control volume and media tracks",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "command"
+        ],
+        "properties": {
+          "action": {
+            "const": "MEDIA"
+          },
+          "command": {
+            "type": "string",
+            "enum": [
+              "VOL_UP",
+              "VOL_DOWN",
+              "VOL_MUTE",
+              "NEXT_TRACK",
+              "PREV_TRACK",
+              "PLAY_PAUSE",
+              "VOLUME_SET"
+            ]
+          },
+          "val": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "CLIPBOARD": {
+      "description": "Read/write system clipboard",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "command"
+        ],
+        "properties": {
+          "action": {
+            "const": "CLIPBOARD"
+          },
+          "command": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "GET_CLIPBOARD",
+              "READ_CLIPBOARD",
+              "WRITE_CLIPBOARD",
+              "SET",
+              "SET_CLIPBOARD"
+            ]
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CLIPBOARD_WRITE_ACK": {
+      "description": "Acknowledges text written to the host clipboard without reporting a new PC clipboard item",
+      "response": {
+        "type": "object",
+        "required": [
+          "action",
+          "status",
+          "text"
+        ],
+        "properties": {
+          "action": {
+            "const": "CLIPBOARD_WRITE_ACK"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "CLIPBOARD_WRITTEN"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "CLIPBOARD_ITEM": {
+      "description": "New text clipboard change; requires the host clipboard history setting to be enabled and the authenticated client to advertise clipboard-history-v1.",
+      "response": {
+        "type": "object",
+        "required": [
+          "action",
+          "text",
+          "source",
+          "createdAt"
+        ],
+        "properties": {
+          "action": {
+            "const": "CLIPBOARD_ITEM"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100000
+          },
+          "source": {
+            "const": "pc"
+          },
+          "createdAt": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "DECK_TRIGGER": {
+      "description": "Execute a saved Aether Deck control at the current configuration revision",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "triggerId",
+          "revision",
+          "deckId",
+          "pageId",
+          "controlId"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_TRIGGER"
+          },
+          "triggerId": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "deckId": {
+            "type": "string"
+          },
+          "pageId": {
+            "type": "string"
+          },
+          "controlId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "DECK_SLIDER": {
+      "description": "Set a Deck slider using an ordered sequence",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "triggerId",
+          "revision",
+          "deckId",
+          "pageId",
+          "controlId",
+          "value",
+          "sequence"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_SLIDER"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "value": {
+            "type": "number"
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "CLIPBOARD_TEXT": {
+      "description": "CLIPBOARD_TEXT host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "CLIPBOARD_TEXT"
+          }
+        }
+      }
+    },
+    "DECK_ACTION_RESULT": {
+      "description": "DECK_ACTION_RESULT host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_ACTION_RESULT"
+          }
+        }
+      }
+    },
+    "DECK_ASSET_CHUNK": {
+      "description": "DECK_ASSET_CHUNK host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_ASSET_CHUNK"
+          }
+        }
+      }
+    },
+    "DECK_ASSET_ERROR": {
+      "description": "DECK_ASSET_ERROR host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_ASSET_ERROR"
+          }
+        }
+      }
+    },
+    "DECK_ASSET_REQUEST": {
+      "description": "DECK_ASSET_REQUEST client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_ASSET_REQUEST"
+          },
+          "hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    },
+    "DECK_NAVIGATE": {
+      "description": "DECK_NAVIGATE client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_NAVIGATE"
+          },
+          "deckId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "pageId": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      }
+    },
+    "DECK_PATCH": {
+      "description": "DECK_PATCH host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_PATCH"
+          }
+        }
+      }
+    },
+    "DECK_SNAPSHOT": {
+      "description": "DECK_SNAPSHOT host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_SNAPSHOT"
+          }
+        }
+      }
+    },
+    "DECK_STATE_PATCH": {
+      "description": "DECK_STATE_PATCH host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_STATE_PATCH"
+          }
+        }
+      }
+    },
+    "DECK_SYNC_REQUEST": {
+      "description": "DECK_SYNC_REQUEST client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_SYNC_REQUEST"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "FILE_CANCEL": {
+      "description": "FILE_CANCEL client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_CANCEL"
+          },
+          "fileId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "error": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "FILE_CHUNK_ACK": {
+      "description": "FILE_CHUNK_ACK client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_CHUNK_ACK"
+          },
+          "fileId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "ERROR"
+            ]
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "chunkIndex": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "error": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "FILE_END_ACK": {
+      "description": "FILE_END_ACK client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_END_ACK"
+          },
+          "fileId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "ERROR"
+            ]
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "chunkIndex": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "error": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "FILE_START_ACK": {
+      "description": "FILE_START_ACK client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "FILE_START_ACK"
+          },
+          "fileId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "ERROR"
+            ]
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "chunkIndex": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "error": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "KEY_PRESS": {
+      "description": "KEY_PRESS client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "KEY_PRESS"
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 100000
+          },
+          "command": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "MOUSE_CLICK": {
+      "description": "MOUSE_CLICK client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "MOUSE_CLICK"
+          },
+          "button": {
+            "enum": [
+              "left",
+              "right",
+              "middle"
+            ]
+          }
+        }
+      }
+    },
+    "MOUSE_MOVE": {
+      "description": "MOUSE_MOVE client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "MOUSE_MOVE"
+          },
+          "dx": {
+            "type": "number"
+          },
+          "dy": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "MOUSE_SCROLL": {
+      "description": "MOUSE_SCROLL client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "MOUSE_SCROLL"
+          },
+          "delta": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "PING": {
+      "description": "PING client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "PING"
+          }
+        }
+      }
+    },
+    "REMOTE_KEY_PRESS": {
+      "description": "REMOTE_KEY_PRESS client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "REMOTE_KEY_PRESS"
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 100000
+          },
+          "command": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "REMOTE_MOUSE_CLICK": {
+      "description": "REMOTE_MOUSE_CLICK client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "REMOTE_MOUSE_CLICK"
+          },
+          "button": {
+            "enum": [
+              "left",
+              "right",
+              "middle"
+            ]
+          }
+        }
+      }
+    },
+    "REMOTE_MOUSE_MOVE": {
+      "description": "REMOTE_MOUSE_MOVE client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "REMOTE_MOUSE_MOVE"
+          },
+          "dx": {
+            "type": "number"
+          },
+          "dy": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "REMOTE_MOUSE_SCROLL": {
+      "description": "REMOTE_MOUSE_SCROLL client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "REMOTE_MOUSE_SCROLL"
+          },
+          "delta": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "SEND_TOAST": {
+      "description": "SEND_TOAST client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "SEND_TOAST"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      }
+    },
+    "SYSTEM": {
+      "description": "SYSTEM client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "SYSTEM"
+          }
+        }
+      }
+    },
+    "TAKE_SCREENSHOT": {
+      "description": "TAKE_SCREENSHOT client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "TAKE_SCREENSHOT"
+          }
+        }
+      }
+    },
+    "WAKE_ENROLL": {
+      "description": "WAKE_ENROLL client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "WAKE_ENROLL"
+          },
+          "deviceId": {
+            "type": "string",
+            "maxLength": 32
+          },
+          "publicKeySpki": {
+            "type": "string",
+            "maxLength": 2048
+          }
+        }
+      }
+    },
+    "WRITE_CLIPBOARD": {
+      "description": "WRITE_CLIPBOARD client request; see PROTOCOL.md for semantics",
+      "request": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "WRITE_CLIPBOARD"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 100000
+          }
+        }
+      }
+    },
+    "AUDIO_STREAM_STATUS": {
+      "description": "AUDIO_STREAM_STATUS host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "AUDIO_STREAM_STATUS"
+          }
+        }
+      }
+    },
+    "DECK_NAVIGATION": {
+      "description": "DECK_NAVIGATION host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "DECK_NAVIGATION"
+          }
+        }
+      }
+    },
+    "KEY_PRESSED": {
+      "description": "KEY_PRESSED host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "KEY_PRESSED"
+          }
+        }
+      }
+    },
+    "MOUSE_CLICKED": {
+      "description": "MOUSE_CLICKED host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "MOUSE_CLICKED"
+          }
+        }
+      }
+    },
+    "MOUSE_MOVED": {
+      "description": "MOUSE_MOVED host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "MOUSE_MOVED"
+          }
+        }
+      }
+    },
+    "MOUSE_SCROLLED": {
+      "description": "MOUSE_SCROLLED host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "MOUSE_SCROLLED"
+          }
+        }
+      }
+    },
+    "PONG": {
+      "description": "PONG host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "PONG"
+          }
+        }
+      }
+    },
+    "STREAM_STATUS": {
+      "description": "STREAM_STATUS host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "STREAM_STATUS"
+          }
+        }
+      }
+    },
+    "TAKE_SCREENSHOT_RESPONSE": {
+      "description": "TAKE_SCREENSHOT_RESPONSE host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "TAKE_SCREENSHOT_RESPONSE"
+          }
+        }
+      }
+    },
+    "TELEMETRY": {
+      "description": "TELEMETRY host event; see PROTOCOL.md for semantics",
+      "response": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "const": "TELEMETRY"
+          }
+        }
+      }
+    },
+    "ACCOUNT_HELLO": {
+      "description": "Account handshake over pinned TLS. Access token required for first enrollment; a locally approved grant permits offline LAN reconnect. See PROTOCOL.md account section.",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "ownerId",
+          "hostId",
+          "phoneId",
+          "sessionId"
+        ],
+        "properties": {
+          "action": {
+            "const": "ACCOUNT_HELLO"
+          },
+          "ownerId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "hostId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "phoneId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "sessionId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "grantId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "accessToken": {
+            "type": "string",
+            "maxLength": 16384
+          },
+          "capabilities": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            }
+          }
+        }
+      },
+      "response": {
+        "description": "ACCOUNT_CHALLENGE followed by optional ACCOUNT_APPROVAL_PENDING, then account AUTH_OK or AUTH_REJECTED"
+      }
+    },
+    "ACCOUNT_PROOF": {
+      "description": "Single-use P-256 proof bound to owner, devices, session, transport, grant, nonce and expiry. DER ECDSA SHA-256 encoded as unpadded base64url.",
+      "request": {
+        "type": "object",
+        "required": [
+          "action",
+          "version",
+          "ownerId",
+          "hostId",
+          "phoneId",
+          "sessionId",
+          "grantId",
+          "transport",
+          "nonce",
+          "expiresAt",
+          "signature"
+        ],
+        "properties": {
+          "action": {
+            "const": "ACCOUNT_PROOF"
+          },
+          "version": {
+            "const": 1
+          },
+          "ownerId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "hostId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "phoneId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "sessionId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "grantId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "transport": {
+            "enum": [
+              "lan",
+              "relay"
+            ]
+          },
+          "nonce": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{43}$"
+          },
+          "expiresAt": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "signature": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{90,100}$"
+          }
+        }
+      }
+    }
+  }
+}

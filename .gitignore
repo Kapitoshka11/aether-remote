@@ -1,0 +1,55 @@
+# IDE and operating-system state
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local configuration and secrets
+**/.env
+**/.env.*
+!**/.env.example
+**/local.properties
+**/keystore.properties
+**/*.jks
+**/*.keystore
+**/*.p12
+**/*.pfx
+**/*.pem
+**/*.key
+
+# Dependencies and generated output
+**/node_modules/
+**/.gradle/
+**/.kotlin/
+**/build/
+**/dist/
+**/dist_electron*/
+**/target/
+**/coverage/
+**/__pycache__/
+**/*.py[cod]
+
+# Runtime and release artifacts
+**/*.log
+**/*.pid
+**/*.apk
+**/*.aab
+**/*.exe
+**/*.msi
+**/release_archive/
+**/release_*_final/
+
+# Required Windows packaging resources
+!host/build/
+host/build/*
+!host/build/icon.ico
+!host/build/icon.png
+!host/build/installer.nsh
+
+# Experimental Rust/Tauri host is not part of the 2.5.0 release surface
+host/Cargo.toml
+host/Cargo.lock
+host/crates/
+host/src-tauri/
+host/scripts/run-tauri.cjs

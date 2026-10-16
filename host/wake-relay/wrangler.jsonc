@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aether-wake-relay",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-13",
+  "durable_objects": {
+    "bindings": [
+      { "name": "HOME_GROUPS", "class_name": "HomeGroup" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["HomeGroup"] }
+  ],
+  "observability": { "enabled": true }
+}

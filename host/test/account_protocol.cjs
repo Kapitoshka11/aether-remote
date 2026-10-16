@@ -1,0 +1,54 @@
+const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
+const { createIdentity, deviceId, signGrant, verifyGrant, canonicalProof, signProof, AuthChallenge } = require('../lib/account/protocol.cjs');
+const host = createIdentity();
+const phone = createIdentity();
+const other = createIdentity();
+const grant = signGrant({ ownerId: crypto.randomUUID(), hostId: host.id, phoneId: phone.id,
+  phonePublicKeySpki: phone.publicKeySpki, hostTlsFingerprint: 'a'.repeat(64),
+  grantId: crypto.randomUUID(), revision: 1, issuedAt: 1700000000000 }, host.privateKeyPem);
+assert.equal(deviceId(phone.publicKeySpki), phone.id);
+assert.equal(verifyGrant(grant, host.publicKeySpki), true);
+assert.equal(verifyGrant({ ...grant, phoneId: other.id }, host.publicKeySpki), false);
+assert.equal(verifyGrant({ ...grant, ownerId: crypto.randomUUID() }, host.publicKeySpki), false);
+assert.equal(verifyGrant(grant, other.publicKeySpki), false);
+assert.throws(() => deviceId(phone.publicKeySpki + '\n'));
+const rsa = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 }).publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
+assert.throws(() => deviceId(rsa));
+let now = 1700000001000;
+let allowed = true;
+const auth = new AuthChallenge({ now: () => now, isAllowed: g => allowed && g.grantId === grant.grantId });
+const open = () => auth.issue(grant, crypto.randomUUID(), 'lan');
+let challenge = open();
+assert.match(canonicalProof(challenge).toString(), /^AETHER_ACCOUNT_AUTH_V1\n/);
+assert.equal(auth.verify(signProof(challenge, phone.privateKeyPem)), true);
+assert.equal(auth.verify(signProof(challenge, phone.privateKeyPem)), false, 'one use only');
+challenge = open();
+assert.equal(auth.verify(signProof({ ...challenge, transport: 'relay' }, phone.privateKeyPem)), false);
+assert.equal(auth.verify(signProof(challenge, phone.privateKeyPem)), false, 'invalid proof consumes challenge');
+challenge = open();
+assert.equal(auth.verify(signProof(challenge, other.privateKeyPem)), false);
+challenge = open();
+now = challenge.expiresAt;
+assert.equal(auth.verify(signProof(challenge, phone.privateKeyPem)), false, 'expiry is exclusive');
+challenge = open();
+allowed = false;
+assert.equal(auth.verify(signProof(challenge, phone.privateKeyPem)), false, 'recheck revocation at proof');
+assert.throws(open);
+allowed = true;
+const stale = open();
+challenge = open();
+assert.notEqual(stale.nonce, challenge.nonce);
+assert.equal(auth.verify(signProof(stale, phone.privateKeyPem)), false);
+challenge = open();
+auth.clear();
+assert.equal(auth.verify(signProof(challenge, phone.privateKeyPem)), false);
+assert.throws(() => signGrant({ ...grant, revision: 0 }, host.privateKeyPem));
+console.log('account protocol: 21 checks passed');
+const fixture = require('./fixtures/account-protocol-v1.json');
+assert.equal(verifyGrant(fixture.grant, fixture.hostPublicKeySpki), true);
+assert.equal(canonicalProof(fixture.proof).toString(), fixture.canonicalProof);
+assert.equal(crypto.verify('sha256', canonicalProof(fixture.proof),
+  { key: Buffer.from(fixture.grant.phonePublicKeySpki, 'base64'), format: 'der', type: 'spki' },
+  Buffer.from(fixture.proof.signature, 'base64url')), true);
+console.log('shared Android/Node fixture: 3 checks passed');

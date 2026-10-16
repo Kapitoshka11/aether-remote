@@ -1,0 +1,89 @@
+{
+  "name": "aether-remote-host-agent",
+  "private": true,
+  "version": "2.5.0",
+  "description": "Windows host agent for Aether Remote mobile control.",
+  "type": "module",
+  "main": "main.cjs",
+  "scripts": {
+    "pretest": "npm run build && npm run test:account && node test/review_security.cjs && node test/background_audio.cjs && node scripts/sync-protocol-schema.cjs --check && node test/tls_identity.cjs && node test/protocol_validation.cjs && node test/review_incoming_files.cjs && node test/review_async_assets.cjs && node test/ipc_security.cjs && node test/network_policy.cjs && node test/network_change_monitor.cjs && node test/stream_policy.cjs && node test/file_transfer_policy.cjs && node test/websocket_session_policy.cjs && node --experimental-strip-types test/desktop_bridge.ts && node test/download_directory.cjs && node test/outgoing_renderer_transfers.cjs && node test/powershell_line_worker.cjs && node test/clipboard_history.cjs && python test/python_source_contracts.py && node test/settings_modal.cjs && node test/settings_modal_render.mjs && node test/main_pairing_card_render.mjs",
+    "start": "electron .",
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "sync:python-export": "node scripts/sync-python-export.cjs",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "lint": "tsc --noEmit",
+    "test": "node --experimental-strip-types test/pairing_qr.ts && node --experimental-strip-types test/received_files_model.ts && node test/auth_policy.cjs && node test/pairing_request_delivery.cjs && node test/application_launcher.cjs && node test/aether_deck_asset_selection.cjs && node test/aether_deck_schema.cjs && node test/aether_deck_engine.cjs && node test/aether_deck_providers.cjs && node test/aether_deck_obs.cjs && node test/aether_deck_service.cjs && node --experimental-strip-types test/aether_deck_editor_model.ts && node test/aether_deck_ui.cjs && node test/aether_deck_integration.cjs && node test/wake_protocol.cjs && node test/wake_identity_store.cjs && node test/wake_magic_packet.cjs && node test/wake_bridge.cjs && node test/wake_route.cjs && node test/wake_group_store.cjs && node test/wake_enrollment.cjs && node test/wake_relay_api.cjs && node test/wake_relay_client.cjs && node test/wake_host_service.cjs && node test/runtime-smoke.cjs && python test/python_runtime_smoke.py && node test/windows_input_controller.cjs && node test/windows_audio_controller.cjs && node test/windows_media_controller.cjs && powershell -NoProfile -ExecutionPolicy Bypass -File test/windows_runtime_smoke.ps1",
+    "electron:build": "vite build && electron-builder --win",
+    "test:account": "node test/account_protocol.cjs && node test/account_storage.cjs && node test/account_trust.cjs && node test/account_auth.cjs && node test/account_config.cjs && node test/account_directory.cjs && node test/account_host_service.cjs && node test/account_relay_host.cjs && node test/account_relay_client.cjs && node test/account_tls_relay.cjs",
+    "postinstall": "install-electron"
+  },
+  "build": {
+    "appId": "com.aether.remotehost",
+    "productName": "Aether Remote",
+    "files": [
+      "dist/**/*",
+      "main.cjs",
+      "preload.cjs",
+      "lib/**/*",
+      "build/icon.png"
+    ],
+    "directories": {
+      "output": "dist_electron"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico",
+      "artifactName": "Aether Remote Installer ${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Aether Remote",
+      "uninstallDisplayName": "Aether Remote",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "include": "build/installer.nsh",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    }
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.115.0",
+    "bonjour-service": "^1.4.4",
+    "selfsigned": "^5.5.0",
+    "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/node": "^22.14.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "ajv": "^8.20.0",
+    "autoprefixer": "^10.4.21",
+    "dotenv": "^17.2.3",
+    "electron": "^43.3.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.25.0",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true
+  }
+}

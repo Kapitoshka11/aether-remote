@@ -1,0 +1,12 @@
+{
+  "appId": "com.aether.remote",
+  "appName": "Aether Remote",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true,
+    "allowNavigation": ["*"]
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

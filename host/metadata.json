@@ -1,0 +1,6 @@
+{
+  "name": "Aether Remote Host Agent",
+  "description": "Windows desktop host agent and remote control daemon with liquid-glass UI, WebSocket protocol, screen streaming, and Python source exporter.",
+  "requestFramePermissions": ["clipboard-read", "clipboard-write"],
+  "majorCapabilities": []
+}

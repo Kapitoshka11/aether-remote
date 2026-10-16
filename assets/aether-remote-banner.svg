@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
+  <title id="title">Aether Remote 2.5.0</title>
+  <desc id="desc">Secure remote control for Windows from Android</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080706"/>
+      <stop offset="0.58" stop-color="#12100E"/>
+      <stop offset="1" stop-color="#2B1710"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F9733D"/>
+      <stop offset="1" stop-color="#FF9A52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F9733D" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#F9733D" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000" flood-opacity=".5"/>
+    </filter>
+    <pattern id="grid" width="52" height="52" patternUnits="userSpaceOnUse">
+      <path d="M52 0H0V52" fill="none" stroke="#FFF2E8" stroke-opacity=".055"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="420" rx="34" fill="url(#bg)"/>
+  <rect width="1280" height="420" rx="34" fill="url(#grid)"/>
+  <circle cx="1090" cy="18" r="330" fill="url(#glow)"/>
+  <circle cx="110" cy="438" r="260" fill="#FF9A52" opacity=".07"/>
+
+  <g transform="translate(88 73)" filter="url(#shadow)">
+    <rect width="274" height="274" rx="64" fill="#12100E" fill-opacity=".82" stroke="#FFC49D" stroke-opacity=".34" stroke-width="3"/>
+    <rect x="47" y="61" width="180" height="124" rx="15" fill="none" stroke="#FFF" stroke-width="17"/>
+    <path d="M137 185v36M100 229h74" fill="none" stroke="#FFF" stroke-width="17" stroke-linecap="round"/>
+    <rect x="72" y="82" width="51" height="9" rx="4.5" fill="url(#accent)"/>
+  </g>
+
+  <g transform="translate(420 102)">
+    <text x="0" y="52" fill="#FFFFFF" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="58" font-weight="800" letter-spacing="3">AETHER REMOTE</text>
+    <text x="2" y="102" fill="#FFD7BE" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23" font-weight="500">Android ↔ Windows · безопасно и без лишних границ</text>
+    <rect x="2" y="143" width="148" height="44" rx="22" fill="url(#accent)"/>
+    <text x="76" y="172" fill="#1B0D08" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">VERSION 2.5.0</text>
+    <rect x="166" y="143" width="168" height="44" rx="22" fill="#FFF2E8" fill-opacity=".08" stroke="#FFF2E8" stroke-opacity=".16"/>
+    <text x="250" y="172" fill="#FFFFFF" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17" font-weight="700">PRIVATE BETA</text>
+    <text x="2" y="231" fill="#FFFFFF" fill-opacity=".58" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17">CONTROL · STREAM · FILES · AETHER DECK</text>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aether-account-relay",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-13",
+  "vars": {
+    "SUPABASE_URL": "https://lihklgocvacchmoirosg.supabase.co",
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_SRfRkItYH9bE0q5f6pnolw_zGphWNeE"
+  },
+  "durable_objects": { "bindings": [{ "name": "ACCOUNT_TUNNELS", "class_name": "AccountTunnel" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["AccountTunnel"] }],
+  "ratelimits": [{ "name": "JOIN_LIMITER", "namespace_id": "7423199", "simple": { "limit": 30, "period": 60 } }],
+  "observability": { "enabled": false }
+}

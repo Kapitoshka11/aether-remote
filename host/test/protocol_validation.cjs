@@ -1,0 +1,27 @@
+const assert = require('node:assert/strict');
+const { clipboardWriteText, validateInboundMessage } = require('../lib/protocol-validation.cjs');
+
+assert.equal(validateInboundMessage(null).ok, false);
+assert.equal(validateInboundMessage([]).ok, false);
+assert.equal(validateInboundMessage({ action: 'UNKNOWN_ADMIN_ACTION' }).ok, false);
+assert.equal(validateInboundMessage({ action: 'AUTH', pin: '123456789', capabilities: [] }).ok, true);
+assert.equal(validateInboundMessage({ action: 'AUTH', sessionToken: 'x'.repeat(129) }).ok, false);
+assert.equal(validateInboundMessage({ action: 'AUTH', capabilities: Array(33).fill('x') }).ok, false);
+assert.equal(validateInboundMessage(JSON.parse('{"action":"PING","__proto__":{"admin":true}}')).ok, false);
+assert.equal(validateInboundMessage({ action: 'FILE_CHUNK', fileId: 'x', offset: -1, data: 'YQ==' }).ok, false);
+assert.equal(validateInboundMessage({ action: 'FILE_START', fileSize: 500 * 1024 * 1024 + 1 }).ok, false);
+assert.equal(validateInboundMessage({ action: 'SEND_TOAST', text: 'x'.repeat(1001) }).ok, false);
+assert.equal(validateInboundMessage({ action: 'DECK_TRIGGER', controlId: 'button' }).ok, true);
+const slider = { action: 'DECK_SLIDER', triggerId: 'slider-1', revision: 1, deckId: 'main', pageId: 'home', controlId: 'volume', value: 50, sequence: 1 };
+assert.equal(validateInboundMessage(slider).ok, true);
+assert.equal(validateInboundMessage({ ...slider, triggerId: '' }).ok, false);
+assert.equal(validateInboundMessage({ ...slider, triggerId: undefined }).ok, false);
+assert.equal(validateInboundMessage({ ...slider, triggerId: 42 }).ok, false);
+assert.equal(validateInboundMessage({ action: 'DECK_SNAPSHOT', document: {} }).ok, false);
+assert.equal(validateInboundMessage({ action: 'CLIPBOARD', command: 'SET_CLIPBOARD', text: '' }).ok, true);
+const schema = require('../protocol_schema.json');
+assert.ok(schema.actions.POWER.request.properties.command.enum.includes('CLOSE_WINDOW'));
+assert.ok(schema.actions.CLIPBOARD.request.properties.command.enum.includes('SET_CLIPBOARD'));
+assert.equal(clipboardWriteText({ command: 'SET_CLIPBOARD', text: '' }), '');
+assert.equal(clipboardWriteText({ command: 'SET_CLIPBOARD' }), '');
+console.log('Inbound protocol validation tests passed.');

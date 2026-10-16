@@ -1,0 +1,6 @@
+{
+  "name": "Aether Remote PC",
+  "description": "Android client for secure remote control of an Aether Remote host",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
