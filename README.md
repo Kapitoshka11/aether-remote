@@ -48,46 +48,6 @@ flowchart LR
     B --> D[Экран · звук · файлы · управление]
 ```
 
-## Быстрый старт
-
-### Android
-
-Требуются JDK 17+ и Android SDK 36. Из каталога `mobile/`:
-
-```powershell
-.\gradlew.bat :app:assembleDebug
-.\gradlew.bat :app:installDebug
-```
-
-### Windows-host
-
-Требуются Windows 10+ и Node.js 20+. Из каталога `host/`:
-
-```powershell
-npm install
-npm run build
-npm start
-```
-
-После запуска host покажет данные сопряжения. Откройте мобильное приложение, выберите подключение к ПК и отсканируйте QR-код.
-
-## Проверка проекта
-
-```powershell
-# mobile/
-.\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
-npm install
-npm run lint
-npm test
-npm run build
-
-# host/
-npm install
-npm test
-npm run lint
-npm run build
-```
-
 ## Безопасность
 
 Aether Remote использует HTTPS/WSS, проверку TLS-отпечатка хоста, ограниченный IPC и валидацию входящих протокольных сообщений. Секреты, keystore-файлы, локальные `.env`, сертификаты и готовые установщики исключены из репозитория.

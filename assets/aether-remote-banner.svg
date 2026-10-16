@@ -39,8 +39,6 @@
     <text x="2" y="102" fill="#FFD7BE" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23" font-weight="500">Android ↔ Windows · безопасно и без лишних границ</text>
     <rect x="2" y="143" width="148" height="44" rx="22" fill="url(#accent)"/>
     <text x="76" y="172" fill="#1B0D08" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">VERSION 2.5.0</text>
-    <rect x="166" y="143" width="168" height="44" rx="22" fill="#FFF2E8" fill-opacity=".08" stroke="#FFF2E8" stroke-opacity=".16"/>
-    <text x="250" y="172" fill="#FFFFFF" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17" font-weight="700">PRIVATE BETA</text>
     <text x="2" y="231" fill="#FFFFFF" fill-opacity=".58" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17">CONTROL · STREAM · FILES · AETHER DECK</text>
   </g>
 </svg>
