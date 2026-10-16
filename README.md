@@ -6,7 +6,6 @@
   <img src="https://img.shields.io/badge/version-2.5.0-F9733D?style=for-the-badge" alt="Version 2.5.0">
   <img src="https://img.shields.io/badge/Android-24%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android 24+">
   <img src="https://img.shields.io/badge/Windows-10%2B-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Windows 10+">
-  <img src="https://img.shields.io/badge/status-private_beta-171412?style=for-the-badge" alt="Private beta">
 </p>
 
 <p align="center">
@@ -15,6 +14,8 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/Kapitoshka11/aether-remote/releases/tag/v2.5.0"><strong>Скачать 2.5.0</strong></a>
+  &nbsp;•&nbsp;
   <a href="https://t.me/+DqicSUkTJEAwNzI6"><strong>Telegram проекта</strong></a>
   &nbsp;•&nbsp;
   <a href="https://kapitoshkadev1.netlify.app/#"><strong>Сайт разработчика</strong></a>
@@ -46,14 +47,6 @@ flowchart LR
     C -. защищённый relay .-> B
     B --> D[Экран · звук · файлы · управление]
 ```
-
-## Интерфейс
-
-<p align="center">
-  <img src="mobile/docs/audit-2.0.0/settings-light.png" alt="Светлая тема Aether Remote" width="260">
-  &nbsp;&nbsp;
-  <img src="mobile/docs/audit-2.0.0/settings-landscape.png" alt="Тёмная тема Aether Remote" width="560">
-</p>
 
 ## Быстрый старт
 
