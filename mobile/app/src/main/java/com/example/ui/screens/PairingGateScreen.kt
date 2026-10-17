@@ -78,6 +78,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
@@ -573,6 +578,29 @@ fun PairingGateScreen(
         List(12) { "" }.toMutableStateList()
     }
     val focusRequesters = remember { List(12) { FocusRequester() } }
+
+    fun updatePinFrom(index: Int, rawValue: String) {
+        val digits = rawValue.filter(Char::isDigit)
+        if (digits.isEmpty()) {
+            if (pinDigits[index].isNotEmpty()) {
+                pinDigits[index] = ""
+                if (index > 0) focusRequesters[index - 1].requestFocus()
+            }
+            return
+        }
+
+        digits.take(12 - index).forEachIndexed { offset, digit ->
+            pinDigits[index + offset] = digit.toString()
+        }
+        val nextIndex = (index + digits.length).coerceAtMost(11)
+        if (nextIndex > index) focusRequesters[nextIndex].requestFocus()
+    }
+
+    fun moveToPreviousPin(index: Int) {
+        if (index <= 0) return
+        pinDigits[index - 1] = ""
+        focusRequesters[index - 1].requestFocus()
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -673,12 +701,8 @@ fun PairingGateScreen(
                                     value = pinDigits[i],
                                     focusRequester = focusRequesters[i],
                                     modifier = Modifier.weight(1f),
-                                    onValueChange = { newVal ->
-                                        if (newVal.length <= 1 && newVal.all { it in '0'..'9' }) {
-                                            pinDigits[i] = newVal
-                                            if (newVal.isNotEmpty() && i < 11) focusRequesters[i + 1].requestFocus()
-                                        }
-                                    }
+                                    onValueChange = { newValue -> updatePinFrom(i, newValue) },
+                                    onBackspaceAtEmpty = { moveToPreviousPin(i) }
                                 )
                             }
                         }
@@ -1132,7 +1156,8 @@ private fun PinBox(
     value: String,
     focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    onBackspaceAtEmpty: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -1151,6 +1176,14 @@ private fun PinBox(
             onValueChange = onValueChange,
             modifier = Modifier
                 .focusRequester(focusRequester)
+                .onPreviewKeyEvent { event ->
+                    if (event.type == KeyEventType.KeyDown && event.key == Key.Backspace && value.isEmpty()) {
+                        onBackspaceAtEmpty()
+                        true
+                    } else {
+                        false
+                    }
+                }
                 .fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

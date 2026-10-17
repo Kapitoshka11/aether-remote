@@ -19,8 +19,8 @@ android {
     applicationId = "com.aether.remote"
     minSdk = 24
     targetSdk = 36
-    versionCode = 27
-    versionName = "2.5.0"
+    versionCode = 28
+    versionName = "2.5.1"
     buildConfigField("String", "ACCOUNT_RELAY_URL", "\"$escapedAccountRelayUrl\"")
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

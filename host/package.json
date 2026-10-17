@@ -1,7 +1,7 @@
 {
   "name": "aether-remote-host-agent",
   "private": true,
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Windows host agent for Aether Remote mobile control.",
   "type": "module",
   "main": "main.cjs",

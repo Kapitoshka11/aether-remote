@@ -1,11 +1,15 @@
 package com.example
 
+import android.view.KeyEvent as AndroidKeyEvent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.performKeyPress
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -15,6 +19,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.key.KeyEvent
 import com.example.ui.screens.PairingGateScreen
 import com.example.ui.screens.SavedComputerCard
 import com.example.ui.screens.SavedPc
@@ -77,6 +82,23 @@ class PairingGateLayoutTest {
         }
         composeRule.onNodeWithText("Подключиться к ПК").performClick()
         org.junit.Assert.assertEquals("001042654321", submitted)
+    }
+
+    @Test
+    fun backspaceMovesToAndClearsThePreviousCodeCell() {
+        composeRule.setContent {
+            AetherTheme(themeMode = AetherThemeMode.DARK) {
+                Box(Modifier.size(width = 360.dp, height = 640.dp)) {
+                    PairingGateScreen(onConnect = { _, _, _, _, _ -> })
+                }
+            }
+        }
+
+        val inputs = composeRule.onAllNodes(hasSetTextAction())
+        inputs[0].performTextInput("1")
+        inputs[1].performKeyPress(KeyEvent(AndroidKeyEvent(AndroidKeyEvent.ACTION_DOWN, AndroidKeyEvent.KEYCODE_DEL)))
+
+        inputs[0].assertTextEquals("").assertIsFocused()
     }
 
     @Test

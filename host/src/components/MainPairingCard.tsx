@@ -39,6 +39,7 @@ export const MainPairingCard: React.FC<MainPairingCardProps> = ({
   const endpoint = availableEndpoints.find(candidate => candidate.address === selectedAddress) ?? availableEndpoints[0];
   const pairingAddress = endpoint?.address || ipAddress;
   const payload = encodeUniversal9Code(pairingAddress, pin);
+  const hasTlsFingerprint = /^SHA256:[A-F0-9]{64}$/i.test(tlsFingerprint || '');
 
   useEffect(() => {
     if (!availableEndpoints.some(candidate => candidate.address === selectedAddress)) {
@@ -53,11 +54,18 @@ export const MainPairingCard: React.FC<MainPairingCardProps> = ({
   };
 
   useEffect(() => {
-    const qrDataUri = buildPairingQrUri(pairingAddress, port, payload.code9, tlsFingerprint);
+    if (!hasTlsFingerprint) {
+      setQrCodeUrl('');
+      return;
+    }
+
+    let cancelled = false;
+    const qrDataUri = buildPairingQrUri(pairingAddress, port, payload.code9, tlsFingerprint!);
     QRCode.toDataURL(qrDataUri, { errorCorrectionLevel: 'H', margin: 1, width: 140 }, (err, url) => {
-        if (!err) setQrCodeUrl(url);
+        if (!cancelled && !err) setQrCodeUrl(url || '');
     });
-  }, [pairingAddress, port, payload.code9, tlsFingerprint]);
+    return () => { cancelled = true; };
+  }, [hasTlsFingerprint, pairingAddress, port, payload.code9, tlsFingerprint]);
 
 
   return (
@@ -132,7 +140,7 @@ export const MainPairingCard: React.FC<MainPairingCardProps> = ({
             <div className="absolute top-1 right-1 w-3 h-3 border-t-2 border-r-2 border-orange-500 rounded-tr" />
             <div className="absolute bottom-1 left-1 w-3 h-3 border-b-2 border-l-2 border-orange-500 rounded-bl" />
             <div className="absolute bottom-1 right-1 w-3 h-3 border-b-2 border-r-2 border-orange-500 rounded-br" />
-            {qrCodeUrl ? (
+            {qrCodeUrl && hasTlsFingerprint ? (
               <img
                 src={qrCodeUrl}
                 alt="Aether Pairing QR Code"
@@ -140,7 +148,12 @@ export const MainPairingCard: React.FC<MainPairingCardProps> = ({
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <div className="h-[110px] w-[110px] animate-pulse rounded-lg bg-orange-100 md:h-[130px] md:w-[130px]" aria-label="QR-код создаётся" />
+              <div
+                className="flex h-[110px] w-[110px] animate-pulse items-center justify-center rounded-lg bg-orange-100 px-3 text-center text-[10px] text-orange-900 md:h-[130px] md:w-[130px]"
+                aria-label="QR-код создаётся"
+              >
+                QR-код создаётся…
+              </div>
             )}
           </div>
 
