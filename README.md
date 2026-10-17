@@ -3,7 +3,6 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.5.1-F9733D?style=for-the-badge" alt="Version 2.5.1">
   <img src="https://img.shields.io/badge/Android-24%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android 24+">
   <img src="https://img.shields.io/badge/Windows-10%2B-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Windows 10+">
 </p>
