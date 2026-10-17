@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
-  <title id="title">Aether Remote 2.5.0</title>
+  <title id="title">Aether Remote</title>
   <desc id="desc">Secure remote control for Windows from Android</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -37,8 +37,6 @@
   <g transform="translate(420 102)">
     <text x="0" y="52" fill="#FFFFFF" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="58" font-weight="800" letter-spacing="3">AETHER REMOTE</text>
     <text x="2" y="102" fill="#FFD7BE" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23" font-weight="500">Android ↔ Windows · безопасно и без лишних границ</text>
-    <rect x="2" y="143" width="148" height="44" rx="22" fill="url(#accent)"/>
-    <text x="76" y="172" fill="#1B0D08" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">VERSION 2.5.0</text>
     <text x="2" y="231" fill="#FFFFFF" fill-opacity=".58" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17">CONTROL · STREAM · FILES · AETHER DECK</text>
   </g>
 </svg>
