@@ -1,0 +1,48 @@
+[package]
+name = "aether-remote-host"
+version = "2.6.0"
+edition.workspace = true
+license.workspace = true
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+aether-host-core = { path = "../crates/aether-host-core" }
+aether-host-server = { path = "../crates/aether-host-server" }
+aether-protocol = { path = "../crates/aether-protocol" }
+async-trait = "0.1"
+base64.workspace = true
+clipboard-win = "5"
+local-ip-address = "0.6"
+mac_address = "1"
+serde.workspace = true
+serde_json.workspace = true
+sha2 = "0.10"
+tauri = { version = "2", features = ["tray-icon"] }
+tokio.workspace = true
+dirs = "6"
+socket2 = "0.6"
+winreg = "0.55"
+windows-sys = { version = "0.61", features = [
+  "Win32_Foundation",
+  "Win32_System_SystemInformation",
+  "Win32_System_Threading",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_NetworkManagement_IpHelper",
+  "Win32_NetworkManagement_Ndis",
+  "Win32_Networking_WinSock",
+] }
+windows = { version = "0.61.3", features = [
+  "Win32_Foundation",
+  "Win32_System_Com",
+  "Win32_System_Com_StructuredStorage",
+  "Win32_Media_Audio",
+  "Win32_Media_Audio_Endpoints",
+  "Win32_System_Variant",
+  "Win32_UI_Shell",
+  "Win32_UI_Shell_Common",
+  "Win32_UI_WindowsAndMessaging",
+  "Win32_Security",
+  "Media_Control",
+] }

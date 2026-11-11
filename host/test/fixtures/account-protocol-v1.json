@@ -1,0 +1,30 @@
+{
+  "hostPublicKeySpki": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEyJXYH/jKFN3YQ/8djQTtgxn70s/cDRBRzWAzyvjwxhDUZcyAO7rpBBEC9oH4Eugm+M3uygnzRAKaV9tQS4XAAA==",
+  "grant": {
+    "ownerId": "7560aee0-ef90-4718-b4dc-95ecf6ec6b72",
+    "hostId": "c656087d78e346784452c689bcf3a6d093fcd63bc626458b11aed3b292364c6d",
+    "phoneId": "0d8c29175cc4a9161bd4cb783c8af3775294d69019e9b7fdc94989312e343590",
+    "phonePublicKeySpki": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEgoxgoZIjmkPM0O84fzsYvcaPcydyCPntTPQKYM9oaTHtxZ032nb4q9OVqwyL2lF8kjXrJRtv1PENhMkDjk7nhw==",
+    "hostTlsFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "grantId": "834b7d80-bc35-481a-a42b-0ee16f0d8193",
+    "revision": 1,
+    "issuedAt": 1700000000000,
+    "version": 1,
+    "permissions": "control",
+    "signature": "MEQCIFq_wIHZV5XMfC7kkzsoGyIDUx-4G9w69Y3NtHMz1fdDAiA_glCqfk8N5HJOzPh3A2P42lTH0l0c5tsM0E757jF5eg"
+  },
+  "proof": {
+    "version": 1,
+    "ownerId": "7560aee0-ef90-4718-b4dc-95ecf6ec6b72",
+    "hostId": "c656087d78e346784452c689bcf3a6d093fcd63bc626458b11aed3b292364c6d",
+    "phoneId": "0d8c29175cc4a9161bd4cb783c8af3775294d69019e9b7fdc94989312e343590",
+    "grantId": "834b7d80-bc35-481a-a42b-0ee16f0d8193",
+    "sessionId": "cdb6eccb-6e23-4de1-8ba0-f57c59010708",
+    "transport": "lan",
+    "nonce": "CQ9liBkTQ9AapNepZuBR8KI-2rK1UhbJ8-6v0W4ymw4",
+    "expiresAt": 1700000030000,
+    "signature": "MEUCIQDVuW8_izWpen-piz-quGXsjmOrUPEe0C4DGWIxg_p_IAIgEGWtXOvXOh7lTqBF6ZusMWP0apvp4GIIX7Jyfl00mzo"
+  },
+  "canonicalGrant": "AETHER_ACCOUNT_GRANT_V1\n7560aee0-ef90-4718-b4dc-95ecf6ec6b72\nc656087d78e346784452c689bcf3a6d093fcd63bc626458b11aed3b292364c6d\n0d8c29175cc4a9161bd4cb783c8af3775294d69019e9b7fdc94989312e343590\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEgoxgoZIjmkPM0O84fzsYvcaPcydyCPntTPQKYM9oaTHtxZ032nb4q9OVqwyL2lF8kjXrJRtv1PENhMkDjk7nhw==\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ncontrol\n1700000000000\n834b7d80-bc35-481a-a42b-0ee16f0d8193\n1",
+  "canonicalProof": "AETHER_ACCOUNT_AUTH_V1\n7560aee0-ef90-4718-b4dc-95ecf6ec6b72\nc656087d78e346784452c689bcf3a6d093fcd63bc626458b11aed3b292364c6d\n0d8c29175cc4a9161bd4cb783c8af3775294d69019e9b7fdc94989312e343590\ncdb6eccb-6e23-4de1-8ba0-f57c59010708\nlan\n834b7d80-bc35-481a-a42b-0ee16f0d8193\nCQ9liBkTQ9AapNepZuBR8KI-2rK1UhbJ8-6v0W4ymw4\n1700000030000"
+}

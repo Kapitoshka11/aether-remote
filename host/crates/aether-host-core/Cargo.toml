@@ -1,0 +1,10 @@
+[package]
+name = "aether-host-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+aether-protocol = { path = "../aether-protocol" }
+thiserror.workspace = true
+

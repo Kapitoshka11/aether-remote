@@ -1,0 +1,54 @@
+# IDE and operating-system state
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local configuration and secrets
+**/.env
+**/.env.*
+!**/.env.example
+**/.dev.vars*
+!**/.dev.vars.example
+**/local.properties
+**/keystore.properties
+**/*.jks
+**/*.keystore
+**/*.p12
+**/*.pfx
+**/*.pem
+**/*.key
+
+# Dependencies and generated output
+**/node_modules/
+**/.gradle/
+**/.kotlin/
+**/.wrangler/
+**/.temp/
+**/build/
+**/dist/
+**/dist_electron*/
+**/target/
+**/src-tauri/gen/
+**/coverage/
+**/__pycache__/
+**/*.py[cod]
+
+# Runtime and release artifacts
+**/*.log
+**/*.pid
+**/*.apk
+**/*.aab
+**/*.exe
+**/*.msi
+**/release_archive/
+**/release_*_final/
+
+# Required Windows packaging resources
+!host/build/
+host/build/*
+!host/build/generate-assets.ps1
+!host/build/icon.ico
+!host/build/icon.png
+!host/build/installer.nsh
